@@ -1,5 +1,8 @@
 package test.rest.controller;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -15,8 +18,8 @@ import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
 import lombok.extern.slf4j.Slf4j;
 import opennlp.tools.doccat.DocumentCategorizer;
-import test.rest.model.ResponseMessage;
 import test.rest.model.RequestMessage;
+import test.rest.model.ResponseMessage;
 
 @RestController
 @Slf4j
@@ -65,8 +68,32 @@ public class NLPRestController extends AbstractRESTController{
 		
 		log.info("Results : {}", docCategorizer.getAllResults(prob));
 		
-		String bestCategory = docCategorizer.getBestCategory(prob);
+		boolean notConclude = true;
+		List<String> checkList = new ArrayList<>();
 		
-		return ok(bestCategory);
+		//assume always at least 2
+		for(int idx= 0; idx<prob.length; idx++){
+			String check = String.valueOf(prob[idx]);
+			
+			if(checkList.isEmpty()){
+				checkList.add(check);
+			}
+			//detected different prob, then is not undetermine case
+			else if(!checkList.contains(check)){
+				notConclude = false;
+				break;
+			}
+		}
+		
+		String responseMsg;
+		
+		if(notConclude){
+			responseMsg = "Inconclusive";
+		}
+		else{
+			responseMsg = docCategorizer.getBestCategory(prob);
+		}
+		
+		return ok(responseMsg);
 	}
 }
