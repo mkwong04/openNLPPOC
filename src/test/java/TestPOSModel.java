@@ -1,9 +1,5 @@
-import java.io.BufferedInputStream;
-import java.io.FileInputStream;
 import java.io.InputStream;
 
-import opennlp.tools.doccat.DoccatModel;
-import opennlp.tools.doccat.DocumentCategorizerME;
 import opennlp.tools.postag.POSModel;
 import opennlp.tools.postag.POSTaggerME;
 
