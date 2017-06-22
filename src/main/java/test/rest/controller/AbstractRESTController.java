@@ -30,6 +30,29 @@ public abstract class AbstractRESTController {
 		return buildResponseEntity(body, HttpStatus.OK);
 	}
 
+	
+	/**
+	 * 
+	 * @param message
+	 * @return
+	 */
+	protected ResponseEntity<ResponseMessage> internalServerError(String message){
+		
+		ResponseMessage body = new ResponseMessage();
+		
+		body.setMessage(message);
+		return internalServerError(body);
+	}
+	
+	/**
+	 * 
+	 * @param body
+	 * @return
+	 */
+	protected <T>ResponseEntity<T> internalServerError(T body){
+		return buildResponseEntity(body, HttpStatus.INTERNAL_SERVER_ERROR);
+	}
+
 	/**
 	 * 
 	 * @param body
